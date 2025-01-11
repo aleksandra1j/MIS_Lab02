@@ -49,20 +49,4 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAPHyGkY-zY9qS9c_2K3AfjDquFLZj5Tfg',
-    appId: '1:368819040486:android:e152f1da01f016a14bcb27',
-    messagingSenderId: '368819040486',
-    projectId: 'mobile-app023',
-    storageBucket: 'mobile-app023.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCEjYnPebRldJL2NBx8gE9U65DWmU_Lzo8',
-    appId: '1:368819040486:ios:1aa988e217be49224bcb27',
-    messagingSenderId: '368819040486',
-    projectId: 'mobile-app023',
-    storageBucket: 'mobile-app023.firebasestorage.app',
-    iosBundleId: 'com.example.mis02JokeApp',
-  );
 }
