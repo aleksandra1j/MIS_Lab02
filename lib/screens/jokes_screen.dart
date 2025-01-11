@@ -4,8 +4,15 @@ import '../models/joke.dart';
 
 class JokesScreen extends StatelessWidget {
   final String type;
+  final Function(Joke) onFavoriteToggle;
+  final List<Joke> favoriteJokes;
 
-  const JokesScreen({super.key, required this.type});
+  const JokesScreen({
+    super.key,
+    required this.type,
+    required this.onFavoriteToggle,
+    required this.favoriteJokes,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +32,19 @@ class JokesScreen extends StatelessWidget {
             return ListView.builder(
               itemCount: jokes.length,
               itemBuilder: (context, index) {
+                final joke = jokes[index];
+                final isFavorite = favoriteJokes.contains(joke);
+
                 return ListTile(
-                  title: Text(jokes[index].setup),
-                  subtitle: Text(jokes[index].punchline),
+                  title: Text(joke.setup),
+                  subtitle: Text(joke.punchline),
+                  trailing: IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : null,
+                    ),
+                    onPressed: () => onFavoriteToggle(joke),
+                  ),
                 );
               },
             );

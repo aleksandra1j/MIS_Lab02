@@ -12,4 +12,14 @@ class Joke {
       punchline: json['punchline'],
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! Joke) return false;
+    return type == other.type && setup == other.setup && punchline == other.punchline;
+  }
+
+  @override
+  int get hashCode => Object.hash(type, setup, punchline);
 }

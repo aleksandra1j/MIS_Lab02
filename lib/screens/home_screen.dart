@@ -1,10 +1,45 @@
 import 'package:flutter/material.dart';
+import '../models/joke.dart';
 import '../services/api_services.dart';
 import '../widgets/joke_card.dart';
 import 'jokes_screen.dart';
+import 'favorites_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final List<Joke> _favoriteJokes = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        Navigator.pushNamed(context, '/joke_of_the_day');
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      Navigator.pushNamed(context, '/joke_of_the_day');
+    });
+  }
+
+  void _toggleFavorite(Joke joke) {
+    setState(() {
+      if (_favoriteJokes.contains(joke)) {
+        _favoriteJokes.remove(joke);
+      } else {
+        _favoriteJokes.add(joke);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +47,18 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Joke Types"),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      FavoritesScreen(favoriteJokes: _favoriteJokes, onFavoriteToggle: _toggleFavorite),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.shuffle),
             onPressed: () {
@@ -38,7 +85,11 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JokesScreen(type: jokeTypes[index]),
+                        builder: (context) => JokesScreen(
+                          type: jokeTypes[index],
+                          onFavoriteToggle: _toggleFavorite,
+                          favoriteJokes: _favoriteJokes,
+                        ),
                       ),
                     );
                   },
